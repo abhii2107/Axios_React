@@ -1,4 +1,4 @@
-import './App.css'
+import "./App.css"
 import { Posts } from "./componenets/Posts";
 
 const App = ()=>{

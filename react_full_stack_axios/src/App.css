@@ -1,166 +1,238 @@
-/* ================= GLOBAL RESET ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+/* ================= THEME ================= */
+:root{
+  --bg: #0e1621;
+  --card: #0b1220;
+  --muted: #9aa3b2;
+  --accent: #7aa2ff;
+  --accent-soft: rgba(122,162,255,0.18);
+  --danger: #ff6b6b;
+  --danger-soft: rgba(255,107,107,0.16);
+  --text: #e6eef8;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --gap: 22px;
+  --transition: 220ms cubic-bezier(.4,0,.2,1);
 }
 
-/* ================= DARK THEME ROOT ================= */
-:root {
-  --bg-main: #0b0f14;
-  --bg-card: #121821;
-  --bg-soft: #161d29;
-
-  --accent-1: #7aa2ff;
-  --accent-2: #9f7aea;
-  --accent-3: #4fd1c5;
-
-  --text-main: #e5e7eb;
-  --text-muted: #9ca3af;
-
-  --edit: #5fa8ff;
-  --delete: #ff6b6b;
-
-  --radius-lg: 18px;
-  --radius-md: 12px;
-
-  --transition: 0.3s ease;
+/* ================= BASE ================= */
+html,body,#root{height:100%;}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(900px 400px at top, #0b1b2d 0%, transparent 60%),
+    linear-gradient(180deg,#07121a 0%, var(--bg) 100%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
 }
 
-/* ================= APP WRAPPER ================= */
-.main-section {
-  min-height: 100vh;
-  background: radial-gradient(
-    circle at top,
-    #101827,
-    var(--bg-main)
-  );
-  padding: 40px 24px;
+/* ================= LAYOUT ================= */
+.main-section{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:52px 20px;
 }
 
-/* ================= POSTS SECTION ================= */
-.section-post {
-  max-width: 1200px;
-  margin: auto;
+.section-post{
+  width:100%;
+  max-width:1120px;
 }
 
-/* ================= GRID ================= */
-.section-post ul {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 26px;
+.section-post ul{
+  list-style:none;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(270px, 1fr));
+  gap:var(--gap);
+  padding:0;
+  margin:0;
 }
 
-/* ================= POST CARD ================= */
-.section-post li {
-  background: linear-gradient(
-    145deg,
-    rgba(122, 162, 255, 0.12),
-    rgba(159, 122, 234, 0.08),
-    rgba(79, 209, 197, 0.08)
-  );
-  padding: 18px;
-  border-radius: var(--radius-lg);
-  position: relative;
-  transition: transform var(--transition), box-shadow var(--transition);
+/* ================= CARD ================= */
+.section-post li{
+  position:relative;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.015)
+    );
+  border:1px solid rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:var(--radius);
+  box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+  transition:transform var(--transition), box-shadow var(--transition);
+  display:flex;
+  flex-direction:column;
 }
 
-/* subtle glow border */
-.section-post li::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    var(--accent-1),
-    var(--accent-2),
-    var(--accent-3)
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0.25;
+.section-post li:hover{
+  transform:translateY(-8px);
+  box-shadow:0 22px 50px rgba(2,6,23,0.75);
 }
 
-/* hover */
-.section-post li:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+/* subtle top accent */
+.section-post li::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:16px;
+  right:16px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(122,162,255,0.4), transparent);
+  opacity:0.6;
 }
 
 /* ================= TEXT ================= */
-.section-post li p {
-  background: var(--bg-card);
-  padding: 14px 15px;
-  border-radius: var(--radius-md);
-  margin-bottom: 12px;
-  color: var(--text-main);
-  font-size: 0.92rem;
-  line-height: 1.6;
+.section-post li p{
+  margin:0 0 14px 0;
+  padding:14px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,0.02);
+  font-size:0.95rem;
+  line-height:1.55;
+  color:var(--text);
 }
 
-/* Title */
-.section-post li p:first-child {
-  font-weight: 600;
-  letter-spacing: 0.3px;
+.section-post li p:first-child{
+  font-weight:600;
+  font-size:1rem;
+  letter-spacing:0.2px;
 }
 
-/* ================= BUTTON BASE ================= */
-.section-post li button {
-  width: 48%;
-  padding: 14px 0;          /* bigger button */
-  border: none;
-  border-radius: 14px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* ================= ACTIONS ================= */
+.section-post .actions{
+  display:flex;
+  gap:10px;
+  margin-top:auto;
 }
 
-/* ================= EDIT BUTTON ================= */
-.btn-edit {
-  background: linear-gradient(
-    135deg,
-    #5fa8ff,
-    #7aa2ff
-  );
-  color: #081018;
-  margin-right: 4%;
+/* ================= BUTTONS ================= */
+.section-post button{
+  flex:1;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid transparent;
+  font-weight:600;
+  cursor:pointer;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
 }
 
-.btn-edit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(95, 168, 255, 0.45);
+/* Edit */
+.btn-edit{
+  background:linear-gradient(180deg, var(--accent-soft), rgba(122,162,255,0.08));
+  color:var(--accent);
+  border-color:rgba(122,162,255,0.35);
 }
 
-/* ================= DELETE BUTTON ================= */
-.btn-delete {
-  background: linear-gradient(
-    135deg,
-    #ff6b6b,
-    #ff8787
-  );
-  color: #160808;
+.btn-edit:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 26px rgba(122,162,255,0.35);
 }
 
-.btn-delete:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(255, 107, 107, 0.45);
+/* Delete */
+.btn-delete{
+  background:linear-gradient(180deg, var(--danger-soft), rgba(255,107,107,0.08));
+  color:var(--danger);
+  border-color:rgba(255,107,107,0.35);
+}
+
+.btn-delete:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 26px rgba(255,107,107,0.35);
 }
 
 /* ================= RESPONSIVE ================= */
-@media (max-width: 480px) {
-  .main-section {
-    padding: 24px 16px;
+@media (max-width:520px){
+  .main-section{padding:32px 14px}
+  .section-post ul{gap:16px}
+  .section-post li p{font-size:0.92rem}
+}
+
+/* ================= HELPERS ================= */
+.muted{
+  color:var(--muted);
+  font-size:0.9rem;
+}
+/* ================= FORM WRAPPER ================= */
+.class-form {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto 36px;
+  padding: 22px;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.015)
+    );
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 12px 34px rgba(2,6,23,0.6);
+}
+
+/* ================= COMPACT FORM ================= */
+.class-form {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto 24px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ================= FORM LAYOUT ================= */
+.class-form form {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ================= INPUT ================= */
+.class-form input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.class-form input::placeholder {
+  color: var(--muted);
+}
+
+.class-form input:focus {
+  outline: none;
+  border-color: rgba(122,162,255,0.6);
+}
+
+/* ================= BUTTON ================= */
+.class-form button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(122,162,255,0.4);
+  background: rgba(122,162,255,0.15);
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.class-form button:hover {
+  background: rgba(122,162,255,0.25);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 640px) {
+  .class-form form {
+    grid-template-columns: 1fr;
   }
 
-  .section-post li {
-    padding: 16px;
+  .class-form button {
+    width: 100%;
   }
 }
