@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react"
-import { PostData } from "../API/PostApi";
+import { PostData, updateData } from "../API/PostApi";
 
-export const Form = ({ data, setData,updateDataApi,setUpdateApi }) => {
+export const Form = ({ data, setData, updateDataApi, setUpdateDataApi }) => {
     const [addData, setAddData] = useState({
         title: "",
         body: ""
     })
+    let isEmpty = Object.keys(updateDataApi).length === 0;
 
     // get the updated data and add into inputfield
-    useEffect(()=>{
+    useEffect(() => {
         updateDataApi && setAddData({
-            title:updateDataApi.title || "",
-            body:updateDataApi.body || "",
+            title: updateDataApi.title || "",
+            body: updateDataApi.body || "",
 
         })
-    },[updateDataApi])
+    }, [updateDataApi])
 
     const handleInputChange = (e) => {
         const name = e.target.name;
@@ -37,17 +38,43 @@ export const Form = ({ data, setData,updateDataApi,setUpdateApi }) => {
     }
     const addPostData = async () => {
         const res = await PostData(addData);
-        console.log("respone",res);
+        console.log("respone", res);
         if (res.status === 201) {
             setData([...data, res.data]);
-            setAddData({title:"",body:""});
+            setAddData({ title: "", body: "" });
         }
     }
+    //u[pdate post data
+    const updatePostData = async () => {
+        try {
+            const res = await updateData(updateDataApi.id, addData);
+            console.log(res);
 
+            setData((prev) => {
+                return prev.map((currElem) => {
+                    return currElem.id === res.data.id ? res.data : currElem;
+                })
+            })
+            setAddData({ title: "", body: "" });
+            setUpdateDataApi({})
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        addPostData();
+        // determine whether the submit button was Add or Edit
+        const action = e.nativeEvent.submitter.value;
+        const choice = action && action.toLowerCase();
+
+        if (choice === "add") {
+            addPostData();
+        }
+        else if (choice === "edit") {
+            updatePostData();
+        }
     }
     return (
         <form onSubmit={handleFormSubmit}>
@@ -74,7 +101,7 @@ export const Form = ({ data, setData,updateDataApi,setUpdateApi }) => {
 
                 />
             </div>
-            <button type="submit">Add</button>
+            <button type="submit" value={isEmpty ? "Add" : "Edit"}>{isEmpty ? "Add" : "Edit"}</button>
         </form>
     )
 }
